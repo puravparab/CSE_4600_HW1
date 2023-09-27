@@ -1,8 +1,9 @@
 # Homework 1
 ## Install
-Clone repository
+1. Fork the  repository
+2. Clone the repository
 ```
-git clone https://github.com/puravparab/CSE_4600_HW1.git
+git clone <Enter repo url>
 ```
 
 ## Usage
@@ -13,6 +14,8 @@ git add .
 git commit -m "<enter commit msg>"
 git push -u origin master
 ```
+
+Create a pull request after commiting to github
 
 Update local repository if changes were made in the github repo
 ```
