@@ -33,6 +33,17 @@ int main(){
 		cout << message;
 		sleep (1);
 	}
+	
+	if (pid == 0){
+		pid = fork();
+		if (pid == 0){
+			cout << "grandchild PID: " << getpid() << endl;
+		} else {
+			cout << "child PID: " << getpid() << endl;
+			cout << "parent PID: " << getppid() << endl;
+		}
+		
+	}
 
 	//waiting for child to finish
 	if (pid != 0) { //parent
