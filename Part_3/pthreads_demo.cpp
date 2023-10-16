@@ -32,21 +32,35 @@ void* numbers_product(void* arg) {
 	return NULL;
 }
 
+// Third thread to compute the average of the first N natural numbers
+void* numbers_average(void* arg) {
+	// Average from 1 to N:
+	// average = N(N+1) / 2N
+	double average = (N + 1) / 2.0;
+	std::cout << "Average of the numbers from 1 to " << N << ": " << average << std::endl;
+	pthread_exit (0);
+	return NULL;
+}
+
 int main() {
-	pthread_t id1, id2; //thread identifiers
-	pthread_attr_t attr1, attr2; //set of thread attributes
-	const char *tnames[2] = { "Sum Thread", "Product Thread" }; //names of threads
+	pthread_t id1, id2, id3; //thread identifiers
+	pthread_attr_t attr1, attr2, attr3; //set of thread attributes
+	const char *tnames[3] = { "Sum Thread", "Product Thread", "Average Thread" }; //names of threads
 
 	//get the default attributes
 	pthread_attr_init (&attr1);
 	pthread_attr_init (&attr2);
+	pthread_attr_init (&attr3);
 
 	//create the threads
 	pthread_create (&id1, &attr1, numbers_sum, (void *)tnames[0]);
 	pthread_create (&id2, &attr2, numbers_product, (void *)tnames[1]);
+	pthread_create (&id3, &attr3, numbers_average, (void *)tnames[2]);
+	
 
 	//wait for the threads to exit
 	pthread_join (id1, NULL);
 	pthread_join (id2, NULL);
+	pthread_join (id3, NULL);
 	return 0;
 }
