@@ -1,29 +1,44 @@
-// pipe4.cpp
 #include <iostream>
 #include <cstring>
 #include <unistd.h>
 #include <sys/wait.h>
 
 int main(int argc, char *argv[]) {
-	if (argc != 2) {
-		std::cerr << "Missing input string. Please provide the input string when
-		running the executable" << std::endl;
-		return 1;
-	}
-	const char *toConcatenate = "! Welcome to CSE 4600 Operating Systems course";
+    if (argc != 2) {
+        std::cerr << "Missing input string. Please provide the input string when running the executable" << std::endl;
+        return 1;
+    }
 
-	int fd[2];
-	if (pipe(fd) == -1) {
-		std::cerr << "Pipe failed" << std::endl;
-		return 1;
-	}
-	// Create a child process to read from the pipe
-	// YOUR CODE HERE
+    const char *toConcatenate = "! Welcome to CSE 4600 Operating Systems course";
+    int fd[2];
 
-	// Here check for below
-	// 1. if this is a child process then read the input string from the pipe created by parent process
-	// 2. If this is a parent process, then write the input string to the pipe and wait for the child to finish
+    if (pipe(fd) == -1) {
+        std::cerr << "Pipe failed" << std::endl;
+        return 1;
+    }
 
-	// YOUR CODE HERE
-	return 0;
+    pid_t p = fork();
+
+    if (p < 0) {
+        std::cerr << "fork failed" << std::endl;
+        return 1;
+    } else if (p == 0) { 
+        close(fd[1]);  
+
+        char buffer[1024];
+        read(fd[0], buffer, sizeof(buffer));
+
+        std::cout << buffer << toConcatenate << std::endl;
+
+        close(fd[0]);  
+    } else { 
+        close(fd[0]);  
+
+        write(fd[1], argv[1], strlen(argv[1]));
+
+        close(fd[1]);  
+
+        wait(NULL);  
+    }
+    return 0;
 }
